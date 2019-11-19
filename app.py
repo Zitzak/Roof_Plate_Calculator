@@ -1,18 +1,15 @@
 import tkinter as tk
 import re
-from roof_plates import RoofPlates
+from roof_plate_converter import RoofPlateConverter
 
 
-class App(tk.Frame, RoofPlates):
+class App(tk.Frame, RoofPlateConverter):
 
 	def __init__(self, the_window):
 		tk.Frame.__init__(self, the_window)
-		# self.user_input = tk.StringVar()
-		self.plates = RoofPlates()
-		test = [[110, 130], [130, 150], [150, 170], [170, 190], [190, 210]]
-		self.size_roof = dict.fromkeys((item[0] for item in test), False)
-		self.display_string = tk.StringVar()
-		self.display_string = tk.StringVar()
+		self.converter = RoofPlateConverter()
+		# test = [[110, 130], [130, 150], [150, 170], [170, 190], [190, 210]]
+		# self.size_roof = dict.fromkeys((item[0] for item in test), False)
 		self.format_string_example = "Input format verkeerd.\nGebruik alleen " \
 									"getallen met één streep(-) ertussen.\nDe getallen mogen" \
 									" alleen een verschil van 10 of 20\nhebben die bij alle maten gelijk moet zijn." \
@@ -22,12 +19,10 @@ class App(tk.Frame, RoofPlates):
 		self.ask_size_label = tk.Label(self, text="Vul hier de maten in")
 		self.text_field = tk.Text(the_window, height=20, width=53)
 		self.button = tk.Button(self, text="Converteren", command=self.validate_input)
-		self.display_label = tk.Label(self, textvariable=self.display_string)
 
 		self.ask_size_label.grid(row=0, column=0)
 		self.text_field.grid(row=1, columnspan=1, padx=10, pady=10)
 		self.button.grid(row=2, column=0)
-		self.display_label.grid(row=3, column=0)
 
 	def validate_input(self):
 
@@ -38,10 +33,20 @@ class App(tk.Frame, RoofPlates):
 				user_input.remove('')
 			except:
 				break
-		print(user_input)
-		if all(x.isdigit() for x in user_input) is False:
-			self.display_output2(self.format_string_example)
+		if all(x.isdigit() for x in user_input) is False or not user_input:
+			self.display_output(self.format_string_example)
+		else:
+			user_input = [int(value) for value in user_input]
+			diff = abs(user_input[0] - user_input[1])
+			for i, j in zip(user_input[:], user_input[2:]):
+				if abs(i - j) is not diff:
+					self.display_output(self.format_string_example)
+			self.run_converter(user_input, diff)
 
+	def run_converter(self, user_input, diff):
+		self.converter.make_dicts(user_input, diff)
+		self.converter.run()
+		self.converter.print_test_final()
 
 		# else:
 		#     # self.pl
@@ -49,7 +54,7 @@ class App(tk.Frame, RoofPlates):
 		#     self.plates.run()
 		#     self.plates.print_test_final()
 
-	def display_output2(self, strig):
+	def display_output(self, strig):
 		self.text_field.delete(1.0, "end")
 		self.text_field.insert(1.0, strig)
 
