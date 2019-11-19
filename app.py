@@ -7,16 +7,13 @@ class App(tk.Frame, RoofPlateConverter):
 
 	def __init__(self, the_window):
 		tk.Frame.__init__(self, the_window)
-		self.converter = RoofPlateConverter()
-		# test = [[110, 130], [130, 150], [150, 170], [170, 190], [190, 210]]
-		# self.size_roof = dict.fromkeys((item[0] for item in test), False)
 		self.format_string_example = "Input format verkeerd.\nGebruik alleen " \
 									"getallen met één streep(-) ertussen.\nDe getallen mogen" \
 									" alleen een verschil van 10 of 20\nhebben die bij alle maten gelijk moet zijn." \
 									"\n\nVoorbeeld 1:\n170-190\n190-210\n210-230\n\nVoorbeeld 2:\n150-160\n160-170\n" \
 									"170-180"
 
-		self.ask_size_label = tk.Label(self, text="Vul hier de maten in")
+		self.ask_size_label = tk.Label(self, text="Vul hieronder de maten in")
 		self.text_field = tk.Text(the_window, height=20, width=53)
 		self.button = tk.Button(self, text="Converteren", command=self.validate_input)
 
@@ -43,16 +40,23 @@ class App(tk.Frame, RoofPlateConverter):
 					self.display_output(self.format_string_example)
 			self.run_converter(user_input, diff)
 
-	def run_converter(self, user_input, diff):
-		self.converter.make_dicts(user_input, diff)
-		self.converter.run()
-		self.converter.print_test_final()
+	def print_result(self, diff, flat_plates, sloping_plates):
 
-		# else:
-		#     # self.pl
-		#     self.plates.make_vars(20, self.size_roof)
-		#     self.plates.run()
-		#     self.plates.print_test_final()
+		output_str = ""
+
+		for keys, value in flat_plates.items():
+			if value is not 0:
+				output_str = output_str + str(keys) + "\tx " + str(value) + "\n"
+		output_str + "\n"
+		for keys, value in sloping_plates.items():
+			if value is not 0:
+				output_str = output_str + str(keys) + "-" + str((int(keys) + diff)) + "\tx " + str(value) + "\n"
+		self.display_output(output_str)
+
+	def run_converter(self, user_input, diff):
+		converter = RoofPlateConverter(user_input, diff)
+		converter.run()
+		self.print_result(diff, converter.final_flat_plate, converter.final_sloping_plate)
 
 	def display_output(self, strig):
 		self.text_field.delete(1.0, "end")
@@ -63,44 +67,3 @@ class App(tk.Frame, RoofPlateConverter):
 # 150-170
 # 170-190
 # 190-210
-
-# def input_to_backend(win):
-
-# print("test")
-# win.display_output2("3 x 100\n1 x 150 - 170\n1 x 170 - 190\n1 x 110 - 130")
-# def display_output(win):
-# 	test = win.tekst.get(1.0, "end")
-# 	test = re.split("[-\n\0]", test)
-# 	test.pop()
-# 	if all(x.isdigit() for x in test) is False:
-# 		w
-# test = [x for x in test if x.isdigit()]
-
-
-# lambda win=self: display_output(win)
-
-# test.pop()
-# if test is False
-# 	print("False")
-# for x in test:
-# 	try:
-# 		int(x)
-# 	except:
-# 		test.remove(x)
-# test = int(test)
-# print(test)
-# win.display_output2("3 x 100\n1 x 150 - 170\n1 x 170 - 190\n1 x 110 - 130")
-
-# my_window = tk.Tk()
-# my_window.title("Dak platen omrekenen")
-# my_window.geometry("400x400")
-# frame_a = AppInterface(my_window)
-# frame_a.config(width=500)
-
-# frame_a.grid(row=0, column=0)
-
-# my_window.mainloop()
-
-# 150-170
-# 170-190
-# 210-230
