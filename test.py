@@ -1,33 +1,21 @@
-from tkinter import *
-
-class MyApp:
-   def __init__(self, parent):
-       self.myParent = parent  ### (7) remember my parent, the root
-       self.myContainer1 = Frame(parent)
-       self.myContainer1.pack()
-
-       self.button1 = Button(self.myContainer1)
-       self.button1.configure(text="OK", background= "green")
-       self.button1.pack(side=LEFT)
-       self.button1.bind("<Button-1>", lambda e, win=self:
-button1Click(win)) ### (1)
-
-       self.button2 = Button(self.myContainer1)
-       self.button2.configure(text="Cancel", background="red")
-       self.button2.pack(side=RIGHT)
-       self.button2.bind("<Button-1>", lambda e, win=self:
-button2Click(win)) ### (2)
-
-def button1Click(win):
-   if win.button1["background"] == "green": ### (4)
-       win.button1["background"] = "yellow"
-   else:
-       win.button2["background"] = "green"
-
-def button2Click(win):
-       win.myParent.destroy()     ### (6)
 
 
-root = Tk()
-myapp = MyApp(root)
-root.mainloop()
+def print_test(flat, difference):
+
+	for keys, value in flat.items():
+		if value is not 0:
+			print(keys, (int(keys) + difference), sep="-", end='\tx')
+			print(value)
+
+if __name__ == '__main__':
+
+	test = [110, 130, 130, 150, 150, 170, 170, 190, 190, 210]
+
+	test2 = test[::2]
+	test2.append(test[-1])
+
+	flat = {30: 0, 40: 0, 50: 0, 60: 0, 70: 0, 80: 6, 90: 0, 100: 0, 110: 0, 120: 0, 142: 0}
+	sloping = {30: 2, 40: 0, 50: 1, 60: 0, 70: 1, 80: 0, 90: 1, 100: 0}
+	print_test(sloping, 20)
+
+	# print(test2, sloping, flat, sep='\n')
