@@ -26,15 +26,19 @@ class App(tk.Frame, RoofPlateCalculator):
 		self.button.grid(row=1, column=0, columnspan=1)
 		self.text_field.focus()
 
-	def validate_input(self):
+	def get_and_split_input(self):
 
-		self.user_input = self.text_field.get(1.0, "end")
-		self.user_input = re.split("[-\n]", self.user_input)
+		user_input = self.text_field.get(1.0, "end")
+		user_input = re.split("[-\n]", user_input)
 		while True:
 			try:
-				self.user_input.remove('')
+				user_input.remove('')
 			except:
 				break
+		return user_input
+
+	def validate_input(self):
+
 		if all(x.isdigit() for x in self.user_input) is False or not self.user_input:
 			self.output_format_string_example()
 		else:
@@ -43,21 +47,22 @@ class App(tk.Frame, RoofPlateCalculator):
 			for i, j in zip(self.user_input[:], self.user_input[2:]):
 				if abs(i - j) is not self.diff:
 					self.output_format_string_example()
-					return
-			self.run_calculator()
+					return False
+			return True
 
 	def format_output(self):
 
 		self.output_str = "Na conversie\n---------------\n\nRechte platen:\n"
 		for keys, value in self.calculator.final_flat_plate.items():
 			if value is not 0:
-				self.output_str = self.output_str + str(keys) + "\tx " + str(value) + "\n"
+				self.output_str = self.output_str + str(keys) + "\t-\tx " + str(value) + "\n"
 		self.output_str = self.output_str + "\nSchuine platen:\n"
 		for keys, value in self.calculator.final_sloping_plate.items():
 			if value is not 0:
-				self.output_str = self.output_str + str(keys) + "-" + str((int(keys) + self.diff)) + "\tx " + str(value) + "\n"
+				self.output_str = self.output_str + str(keys) + "-" + str((int(keys) + self.diff)) + "\t-\tx " + str(value) + "\n"
 
 	def run_calculator(self):
+		self.user_input = self.get_and_split_input()
 		if self.validate_input() is True:
 			self.calculator = RoofPlateCalculator(self.user_input, self.diff)
 			self.calculator.run()

@@ -6,7 +6,7 @@ if __name__ == '__main__':
 	my_window = tk.Tk()
 	my_window.title("Conversie tool")
 
-	frame_a = App(my_window)
+	frame_calculator = App(my_window)
 
 	screen_width = my_window.winfo_screenwidth()
 	screen_height =  my_window.winfo_screenheight()
@@ -16,6 +16,6 @@ if __name__ == '__main__':
 
 	my_window.geometry("+%d+%d" % (start_x_coordinates, start_y_coordinates))
 	my_window.resizable(0,0)
-	frame_a.grid(row=0, column=0)
+	frame_calculator.grid(row=0, column=0)
 
 	my_window.mainloop()
