@@ -5,7 +5,8 @@ This tool converts height measurements of a sloping roof into numbers of plates/
 I created this tool to help a friend of mine with his daily "chores" on work. It was a nice opportunity to practise my python and get a first glimpse into GUI development.
 
 ## Screenshot
-![alt text](https://github.com/Zitzak/roof_plate_calculator/blob/master/Conversion%20Tool.png)
+![alt text](https://github.com/Zitzak/roof_plate_calculator/blob/master/Screenshot2.png)
+![alt text](https://github.com/Zitzak/roof_plate_calculator/blob/master/Screenshot1.png)
 
 
 ## Getting Started
