@@ -1,13 +1,16 @@
 import tkinter as tk
 import re
-from roof_plate_converter import RoofPlateConverter
+from roof_plate_calculator import RoofPlateCalculator
 
 
-class App(tk.Frame, RoofPlateConverter):
+class App(tk.Frame, RoofPlateCalculator):
 
 	def __init__(self, the_window):
 		super().__init__()
-		self.output_str = ""
+		self.output_str = None
+		self.calculator = None
+		self.diff = None
+		self.user_input = None
 		self.format_string_example = "Input format verkeerd.\nGebruik alleen " \
 									"getallen met één streep(-) ertussen.\nDe getallen mogen" \
 									" alleen een verschil van 10 of 20\nhebben die bij alle maten gelijk moet zijn." \
@@ -16,8 +19,7 @@ class App(tk.Frame, RoofPlateConverter):
 
 		self.ask_size_label = tk.Label(self, text="Vul hieronder de maten in")
 		self.text_field = tk.Text(the_window, height=30, width=55)
-		self.text_field.config(relief='sunken')
-		self.button = tk.Button(self, text="Converteren", command=self.validate_input)
+		self.button = tk.Button(self, text="Converteren", command=self.run_calculator)
 
 		self.ask_size_label.grid(row=0, column=0, columnspan=1)
 		self.text_field.grid(row=2, column=0, columnspan=1, padx=10, pady=10)
@@ -26,49 +28,52 @@ class App(tk.Frame, RoofPlateConverter):
 
 	def validate_input(self):
 
-		user_input = self.text_field.get(1.0, "end")
-		user_input = re.split("[-\n]", user_input)
+		self.user_input = self.text_field.get(1.0, "end")
+		self.user_input = re.split("[-\n]", self.user_input)
 		while True:
 			try:
-				user_input.remove('')
+				self.user_input.remove('')
 			except:
 				break
-		if all(x.isdigit() for x in user_input) is False or not user_input:
-			self.display_output(self.format_string_example, False)
+		if all(x.isdigit() for x in self.user_input) is False or not self.user_input:
+			self.output_format_string_example()
 		else:
-			user_input = [int(value) for value in user_input]
-			diff = abs(user_input[0] - user_input[1])
-			for i, j in zip(user_input[:], user_input[2:]):
-				if abs(i - j) is not diff:
-					self.display_output(self.format_string_example, False)
+			self.user_input = [int(value) for value in self.user_input]
+			self.diff = abs(self.user_input[0] - self.user_input[1])
+			for i, j in zip(self.user_input[:], self.user_input[2:]):
+				if abs(i - j) is not self.diff:
+					self.output_format_string_example()
 					return
-			self.run_converter(user_input, diff)
+			self.run_calculator()
 
-	def format_output(self, diff, flat_plates, sloping_plates):
+	def format_output(self):
 
 		self.output_str = "Na conversie\n---------------\n\nRechte platen:\n"
-		for keys, value in flat_plates.items():
+		for keys, value in self.calculator.final_flat_plate.items():
 			if value is not 0:
 				self.output_str = self.output_str + str(keys) + "\tx " + str(value) + "\n"
 		self.output_str = self.output_str + "\nSchuine platen:\n"
-		for keys, value in sloping_plates.items():
+		for keys, value in self.calculator.final_sloping_plate.items():
 			if value is not 0:
-				self.output_str = self.output_str + str(keys) + "-" + str((int(keys) + diff)) + "\tx " + str(value) + "\n"
-		self.display_output(self.output_str, True)
+				self.output_str = self.output_str + str(keys) + "-" + str((int(keys) + self.diff)) + "\tx " + str(value) + "\n"
 
-	def run_converter(self, user_input, diff):
-		converter = RoofPlateConverter(user_input, diff)
-		converter.run()
-		self.format_output(diff, converter.final_flat_plate, converter.final_sloping_plate)
+	def run_calculator(self):
+		if self.validate_input() is True:
+			self.calculator = RoofPlateCalculator(self.user_input, self.diff)
+			self.calculator.run()
+			self.format_output()
+			self.display_output_str()
 
-	def display_output(self, string, end):
+	def display_output_str(self):
 
-		if end is False:
-			self.text_field.delete(1.0, "end")
-			self.text_field.insert(1.0, string)
-		else:
 			self.text_field.insert(1.0, "Voor conversie\n---------------\n\n")
-			self.text_field.insert("end", "\n\n\n" + string)
+			self.text_field.insert("end", "\n\n\n" + self.output_str)
+
+	def output_format_string_example(self):
+
+		self.text_field.delete(1.0, "end")
+		self.text_field.insert(1.0, self.format_string_example)
+
 
 
 #Voorbeelden
