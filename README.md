@@ -16,6 +16,8 @@ I created this tool to help a friend of mine with his daily "chores" at work. It
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine
 ### Prerequisites
-```Python 3+```
+You need python 3+ to run the roofplate converter.
+Installation guide can be found [here.](https://docs.python-guide.org/starting/installation/)
+
 
 __readme update in progress__
