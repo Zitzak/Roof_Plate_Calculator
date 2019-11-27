@@ -1,4 +1,4 @@
-# Roof plate conversion tool
+# Roof Plate Conversion Tool
 This tool converts height measurements of a sloping roof into numbers of plates/sheets of material you would need to create the height. The output are plates that can be bought from the wholesale store.
 
 ## Motivation
@@ -16,8 +16,8 @@ I created this tool to help a friend of mine with his daily "chores" at work. It
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine
 ### Prerequisites
-You need python 3+ to run the roofplate converter.
-Installation guide can be found [here.](https://docs.python-guide.org/starting/installation/)
+You need python 3+ to run the roofplate converter tool.
+Python installation guides can be found [here.](https://docs.python-guide.org/starting/installation/)
 
-
-__readme update in progress__
+## Exeqution
+```Python3 main.py```
